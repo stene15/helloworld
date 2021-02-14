@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+
+Resources:
+  Type: AWS::Lambda::Function
+  Properties:
+    Description: Hello world lambda
+    FunctionName: helloworld.py
+    Handler: helloworld.lambda_handler
+    Role: !Ref LambdaExecutionRole
+    Runtime: Python3.7
+    Timeout: 30
+#
+#  SecurityGroup:
+#    Type: AWS::EC2::SecurityGroup
+#    Properties:
+#      GroupDescription: Allow all outgoing traffic
+#      VpcId:
+#        Ref: ExistingVPC
+#      SecurityGroupEgress:
+#      - IpProtocol: tcp
+#        FromPort: 0
+#        ToPort: 0
+#        CidrIp: 0.0.0.0/0
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:*
+            Resource: arn:aws:logs:*:*:*
+
+Outputs:
